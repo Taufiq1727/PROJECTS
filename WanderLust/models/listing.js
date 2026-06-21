@@ -8,13 +8,24 @@ const listingSchema = new Schema({
   },
   description: String,
   image: {
-    type: String,
-    set : (v) => v === "" ? "https://unsplash.com/photos/man-cliff-diving-into-clear-blue-ocean-water-1h86IGwVWrs" : v,
+    filename: {
+      type: String,
+      default: "listingimage",
+    },
+    url: {
+      type: String,
+      default:
+        "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60",
+      set: (v) =>
+        v === ""
+          ? "https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60"
+          : v,
+    },
   },
   price: Number,
   location: String,
   country: String,
 });
 
-const listing = mongoose.model("listing", listingSchema);
-module.exports = listing;
+const Listing = mongoose.model("Listing", listingSchema);
+module.exports = Listing;
