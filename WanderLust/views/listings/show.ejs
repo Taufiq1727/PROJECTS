@@ -6,7 +6,7 @@
     <title>WanderLust</title>
 </head>
 <body>
-    <h3>Lsiting details</h3>
+    <h3>Listing details</h3>
     <ul>
         <li><%=listing.title%></li>
         <li><%=listing.description%></li>
@@ -14,5 +14,11 @@
         <li><%=listing.location%></li>
         <li><%=listing.country%></li>
     </ul>
+    <br>
+    <a href="/listings/<%= listing._id %>/edit">Edit this Listing</a>
+    <br>    
+    <form method="POST" action="/listing/<%=listing._id%>?_method=DELETE">
+        <button>Delete this listing</button>
+    </form>
 </body>
 </html>
