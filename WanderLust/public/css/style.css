@@ -1,0 +1,51 @@
+body{
+    background-color: #d1a1b1;
+}
+.navbar {
+    height: 5rem;
+    background-color: #f8f9fa;
+}
+.fa-compass {
+    font-size: 2rem;
+    color: red;
+}
+
+.nav-link {
+    color: black !important;
+}
+
+footer {
+    background-color: #f8f9fa;
+    padding: 1rem;
+    text-align: center;
+    border-top: 2px solid black;
+}
+.f-info-links a{
+    text-decoration: none;
+    color: black;
+}
+.f-info-links a:hover {
+    text-decoration: underline;
+}
+.f-info-links, 
+.f-info-socials {
+    display: flex;
+    justify-content: center;
+    gap: 2rem;
+    width: 100%;
+    font-size: 1.2rem;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+
+.f-info{
+    height: 8rem;
+    background-color: #f8f9fa;
+    display: flex;
+    justify-content: center;
+    flex-wrap: wrap;
+    align-items: space-evenly;
+    
+}
