@@ -1,6 +1,8 @@
 <% layout("/layouts/boilerplate.ejs") %>
 <body>
     <h3>Listing details</h3>
+    <img src="<%= listing.image.url %>" alt="listing image" style="width: 300px;">
+    <br>
     <ul>
         <li><%=listing.title%></li>
         <li><%=listing.description%></li>
