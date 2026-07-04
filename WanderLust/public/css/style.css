@@ -1,5 +1,11 @@
 body{
-    background-color: #d1a1b1;
+   
+    display:flex;
+    flex-direction:column;
+    min-height:100vh;
+}
+.container{
+    flex:1;
 }
 .navbar {
     height: 5rem;
@@ -15,10 +21,12 @@ body{
 }
 
 footer {
-    background-color: #f8f9fa;
+    background-color: #ffffff;
     padding: 1rem;
     text-align: center;
     border-top: 2px solid black;
+    width: 100%;
+    height: 100%;
 }
 .f-info-links a{
     text-decoration: none;
@@ -83,4 +91,25 @@ footer {
     background-color: white;
     color: white;
     transition: opacity 0.3s ease-in-out;
+}
+
+
+.add-btn, .edit-btn{
+    background-color: black;
+    color: white;
+    border: none;
+}
+
+.show-img{
+    height: 30vh;
+}
+
+
+.btns{
+    display: flex;
+}
+
+.show-card{
+    padding-left:0 !important;
+    padding-right:0 !important;
 }
