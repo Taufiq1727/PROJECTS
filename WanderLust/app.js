@@ -6,6 +6,7 @@ const Listing = require("./models/listing");
 const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
+const wrapAsync = require("./utils/wrapAsync");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -46,12 +47,13 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 //create route
-app.post("/listings", async (req, res) => {
+app.post("/listings", wrapAsync(async (req, res) => {
+
   const newListing = new Listing(req.body.listing);
   await newListing.save();
   res.redirect("/listings");
-  console.log(listing);
-});
+ 
+}));
 
 //Edit Route 
 app.get("/listings/:id/edit", async (req, res) => {
@@ -99,6 +101,9 @@ app.delete("/listings/:id", async (req, res) => {
 //   }
 // });
 
+app.use((err, req, res, next) => {
+  res.send("Something went wrong");
+});
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
 });
