@@ -7,6 +7,7 @@ const path = require("path");
 const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
+const ExpressError = require("./utils/ExpressError");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -99,10 +100,14 @@ app.delete("/listings/:id", async (req, res) => {
 //     console.log(err);
 //     res.status(500).send("Something went wrong while creating the listing.");
 //   }
-// });
+// });a
 
+app.use((req, res, next) => {
+    next(new ExpressError(404, "Page Not Found"));
+});
 app.use((err, req, res, next) => {
-  res.send("Something went wrong");
+  let {statusCode ,message} = err;
+  res.status(statusCode).send(message);
 });
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
