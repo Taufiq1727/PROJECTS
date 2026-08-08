@@ -8,6 +8,7 @@ const methodOverride = require("method-override");
 const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
+const { listingSchema } = require("./schema.js");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -20,6 +21,7 @@ app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
 app.use(express.static(path.join(__dirname, "public")));
 app.use(express.urlencoded({ extended: true }));
+app.use(express.json());
 app.use(methodOverride("_method"));
 app.engine("ejs",ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
@@ -27,6 +29,16 @@ app.use(express.static(path.join(__dirname, "public")));
 app.get("/", (req, res) => {
   res.send("Hi root");
 });
+
+const validateListing = (req, res, next) => {
+  const { error } = listingSchema.validate(req.body);
+  if (error) {
+    const msg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, msg);
+  } else {
+    next();
+  }
+}
 
 app.get("/listings", async (req, res) => {
    const allListings = await Listing.find({});
@@ -48,12 +60,11 @@ app.get("/listings/:id", async (req, res) => {
 });
 
 //create route
-app.post("/listings", wrapAsync(async (req, res) => {
+app.post("/listings",validateListing, wrapAsync(async (req, res) => {
 
-  const newListing = new Listing(req.body.listing);
-  await newListing.save();
-  res.redirect("/listings");
- 
+    const newListing = new Listing(req.body.listing);
+    await newListing.save();
+    res.redirect(`/listings/${newListing._id}`);
 }));
 
 //Edit Route 
@@ -64,7 +75,7 @@ app.get("/listings/:id/edit", async (req, res) => {
 });
 
 //Update Route
-app.put("/listings/:id", async (req, res) => {
+app.put("/listings/:id",validateListing,  async (req, res) => {
   const {id} = req.params;
   const listing = await Listing.findByIdAndUpdate(id, req.body.listing, {new:true});
   res.redirect(`/listings/${listing._id}`);
@@ -107,7 +118,7 @@ app.use((req, res, next) => {
 });
 app.use((err, req, res, next) => {
   let {statusCode ,message} = err;
-  res.status(statusCode).send(message);
+  res.render("error.ejs",{statusCode,message});
 });
 app.listen(port, () => {
   console.log(`Server is running on port ${port}`);
