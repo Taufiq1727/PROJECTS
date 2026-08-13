@@ -11,7 +11,7 @@
     <a href="/listings/<%=listing._id%>" class="listing-link"> 
     <div class="card" style="width: 20rem;">
 
-  <img src="<%= listing.image.url %>" class="card-img-top" alt="listing image" style="height: 20rem" />
+  <img src="<%= listing.image?.url || 'https://images.unsplash.com/photo-1507525428034-b723cf961d3e?auto=format&fit=crop&w=800&q=60' %>" class="card-img-top" alt="listing image" style="height: 20rem" />
   <div class="card-img-overlay">
     <h5 class="card-title"></h5>
     <p class="card-text"></p>

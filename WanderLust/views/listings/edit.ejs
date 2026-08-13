@@ -38,7 +38,7 @@
             type="text"
             id="image"
             name="listing[image][url]"
-            value="<%= listing.image.url %>"
+            value="<%= listing.image?.url || '' %>"
             class="form-control"
             required
         >
