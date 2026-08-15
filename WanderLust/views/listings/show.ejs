@@ -24,7 +24,7 @@
       <div class="d-flex gap-2 mt-3">
         <form action="/listings/<%= listing._id %>/edit" method="GET">
           <button class="btn btn-dark">Edit</button>
-        </form>  
+        </form>
 
         <form
           action="/listings/<%= listing._id %>?_method=DELETE"
@@ -38,16 +38,46 @@
   <div class="col-8 offset-3 mb-3">
     <hr />
     <h3>Leave a review</h3>
-    <form>
+
+    <form
+      action="/listings/<%= listing._id %>/reviews"
+      method="POST"
+      novalidate
+      class="needs-validation"
+    >
       <div>
-        <label for="review" class="form-label">Review:</label>
-        <input type="range" min="1" max="5 " id="review" name="review" class="form-range"/>
+        <label for="rating" class="form-label">Rating:</label>
+        <input
+          type="range"
+          min="1"
+          max="5"
+          id="rating"
+          name="rating"
+          class="form-range"
+        />
       </div>
+
       <div>
         <label for="comment" class="form-label">Comment:</label>
-        <textarea id="comment" name="comment"></textarea>
+        <textarea
+          id="comment"
+          name="comment"
+          class="form-control"
+          required
+        ></textarea>
+        <div class="invalid-feedback">
+          Please Submit some comments for review
+        </div>
       </div>
+
       <button type="submit" class="btn btn-primary mt-2">Submit</button>
     </form>
-</div>   
-  
+
+    <hr />
+    <h3>Reviews</h3>
+    <% for (review of listing.reviews) { %>
+      <li><%= review.comment%> , <%= review.rating %></li>
+    <% } %>
+    
+  </div>
+</div>

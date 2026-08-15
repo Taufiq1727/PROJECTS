@@ -9,6 +9,8 @@ const ejsMate = require("ejs-mate");
 const wrapAsync = require("./utils/wrapAsync");
 const ExpressError = require("./utils/ExpressError");
 const { listingSchema } = require("./schema.js");
+const Review = require("./models/review");
+const { reviewSchema } = require("./schema.js");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -31,6 +33,15 @@ app.get("/", (req, res) => {
 });
 
 const validateListing = (req, res, next) => {
+  const { error } = reviewSchema.validate(req.body);
+  if (error) {
+    const errMsg = error.details.map((el) => el.message).join(",");
+    throw new ExpressError(400, errMsg);
+  } else {
+    next();
+  }
+}
+const validateReview = (req, res, next) => {
   const { error } = listingSchema.validate(req.body);
   if (error) {
     const msg = error.details.map((el) => el.message).join(",");
@@ -55,7 +66,7 @@ res.render("listings/new.ejs");
 //show route 
 app.get("/listings/:id", async (req, res) => {
   const {id} = req.params;
-  const listing = await Listing.findById(id);
+  const listing = await Listing.findById(id).populate("reviews");
    res.render("listings/show.ejs",{listing})
 });
 
@@ -88,8 +99,22 @@ app.delete("/listings/:id", async (req, res) => {
   res.redirect("/listings");
 });
 
+//reviews
+app.post("/listings/:id/reviews", validateReview,wrapAsync(async (req, res) => {
+  const { id } = req.params;
 
+  const listing = await Listing.findById(id);
 
+  const newReview = new Review(req.body);
+
+  await newReview.save();
+
+  listing.reviews.push(newReview._id);
+
+  await listing.save();
+
+  res.redirect(`/listings/${listing._id}`);
+}));
 // app.get("/testListing", async (req, res) => {
 //   try {
 //     const sampleListing = new Listing({
