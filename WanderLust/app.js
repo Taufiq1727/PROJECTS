@@ -132,7 +132,7 @@ app.delete(
 
     res.redirect(`/listings/${id}`);
   }),
-);
+);    
 
 // app.get("/testListing", async (req, res) => {
 //   try {
