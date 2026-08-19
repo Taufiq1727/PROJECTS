@@ -24,7 +24,7 @@ const validateReview = (req, res, next) => {
     throw new ExpressError(400, msg);
   } else {
     next();
-  }
+  }   
 };
 
 
