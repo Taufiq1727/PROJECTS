@@ -12,10 +12,8 @@ const { listingSchema } = require("./schema.js");
 const Review = require("./models/review");
 const { reviewSchema } = require("./schema.js");
 const listings = require("./routes/listing");
-const reviews = require("./routes/review");   
-
-
-
+const reviews = require("./routes/review");
+const session = require("express-session");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -33,12 +31,17 @@ app.use(methodOverride("_method"));
 app.engine("ejs", ejsMate);
 app.use(express.static(path.join(__dirname, "public")));
 
+const sessionOptions = {
+  secret : "secretcode",
+  resave : false,
+  saveUninitialized : true,
+}
+
+app.use(session(sessionOptions));
+
 app.get("/", (req, res) => {
   res.send("Hi root");
 });
-
-
-
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
