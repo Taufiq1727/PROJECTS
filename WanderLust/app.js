@@ -14,6 +14,7 @@ const { reviewSchema } = require("./schema.js");
 const listings = require("./routes/listing");
 const reviews = require("./routes/review");
 const session = require("express-session");
+const flash = require("connect-flash");
 
 main()
   .then(() => console.log("Connected to MongoDB"))
@@ -35,13 +36,27 @@ const sessionOptions = {
   secret : "secretcode",
   resave : false,
   saveUninitialized : true,
+  cookie : {
+    expires : Date.now() + 1000 * 60 * 60 * 24 * 7,
+    maxAge : 1000 * 60 * 60 * 24 * 7,
+    httpOnly : true
+  }
 }
 
-app.use(session(sessionOptions));
-   
+
 app.get("/", (req, res) => {
   res.send("Hi root");
 });
+
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req, res, next) => {
+  res.locals.success = req.flash("success");
+  res.locals.error = req.flash("error");
+  next();
+});
+
 
 app.use("/listings", listings);
 app.use("/listings/:id/reviews", reviews);
